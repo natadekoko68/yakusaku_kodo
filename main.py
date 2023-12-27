@@ -8,73 +8,6 @@ import japanize_matplotlib
 input = "/Users/kotaro/PycharmProjects/yakusaku1/input/"
 df = pd.read_csv(input + "data_yakusaku_gakusyu.csv").drop('group_num', axis=1)
 
-print(df.columns)
-
-att_col = []
-fix_col = []
-rev_col = []
-
-for col in df.columns:
-    if "att" in col:
-        att_col.append(col)
-    if "fix" in col:
-        fix_col.append(col)
-    if "rev" in col:
-        rev_col.append(col)
-
-for string in att_col:
-    print(re.search("day[0-9]_.+_.+", string))
-
-labels_att = []
-values_att = []
-labels_fix = []
-values_fix = []
-labels_rev = []
-values_rev = []
-for col in df.columns:
-    if re.search("day[0-9]_att_.+", col):
-        for i in range(len(df[col])):
-            label = ""
-            if "day1" in col:
-                label += "1日目"
-            else:
-                label += "2日目"
-            label += "\n"
-            if "sa" in col:
-                label += "生理食塩水"
-            else:
-                label += "スコポラミン"
-            labels_att.append(label)
-            values_att.append(df.loc[i, col])
-    elif re.search("day[0-9]_fix_.+", col):
-        for i in range(len(df[col])):
-            label = ""
-            if "day1" in col:
-                label += "1日目"
-            else:
-                label += "2日目"
-            label += "\n"
-            if "sa" in col:
-                label += "生理食塩水"
-            else:
-                label += "スコポラミン"
-            labels_fix.append(label)
-            values_fix.append(df.loc[i, col])
-    elif re.search("day[0-9]_rev_.+", col):
-        for i in range(len(df[col])):
-            label = ""
-            if "day1" in col:
-                label += "1日目"
-            else:
-                label += "2日目"
-            label += "\n"
-            if "sa" in col:
-                label += "生理食塩水"
-            else:
-                label += "スコポラミン"
-            labels_rev.append(label)
-            values_rev.append(df.loc[i, col])
-
 def make_label_value(df):
     labels = {}
     values = {}
@@ -98,31 +31,28 @@ def make_label_value(df):
                     values[key].append(df.loc[i, col])
     return labels, values
 
+def make_dict(df):
+    ret = {}
+    a, b = make_label_value(df)
+    for key in ["att", "fix", "rev"]:
+        dict_temp = dict(labels=a[key], values=b[key])
+        ret[key] = pd.DataFrame(dict_temp)
+    return ret
 
+dict = make_dict(df)
 
-dict_att = dict(labels=labels_att, values=values_att)
-df_att = pd.DataFrame(dict_att)
-sns.swarmplot(df_att, x="labels", y="values", palette="Set2")
-sns.boxplot(df_att, x="labels", y="values", color="white")
-plt.title("実験1(獲得)")
+cnt = 0
+lab = ["獲得","固定","再生"]
+fig = plt.figure(figsize=(12,5))
+order = ["1日目\n生理食塩水", "2日目\n生理食塩水", "1日目\nスコポラミン", "2日目\nスコポラミン"]
+for key in dict:
+    ax = plt.subplot(1, 3, cnt+1)
+    sns.swarmplot(dict[key], x="labels", y="values", order=order, palette="Set2", size=5)
+    sns.boxplot(dict[key], x="labels", y="values", color="white", order=order)
+    plt.title("実験1(" + lab[cnt] + ")")
+    plt.xticks(size=5)
+    cnt += 1
 plt.tight_layout()
-plt.savefig("/Users/kotaro/Desktop/獲得.jpg", dpi=300)
-plt.show()
+plt.savefig("/Users/kotaro/Desktop/実験1_all.jpg", dpi=300)
+sys.exit()
 
-dict_fix = dict(labels=labels_fix, values=values_fix)
-df_fix = pd.DataFrame(dict_fix)
-sns.swarmplot(df_fix, x="labels", y="values", palette="Set2")
-sns.boxplot(df_fix, x="labels", y="values", color="white")
-plt.title("実験1(固定)")
-plt.tight_layout()
-plt.savefig("/Users/kotaro/Desktop/固定.jpg", dpi=300)
-plt.show()
-
-dict_rev = dict(labels=labels_rev, values=values_rev)
-df_rev = pd.DataFrame(dict_rev)
-sns.swarmplot(df_rev, x="labels", y="values", palette="Set2")
-sns.boxplot(df_rev, x="labels", y="values", color="white")
-plt.title("実験1(再生)")
-plt.tight_layout()
-plt.savefig("/Users/kotaro/Desktop/再生.jpg", dpi=300)
-plt.show()
