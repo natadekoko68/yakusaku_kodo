@@ -8,7 +8,6 @@ warnings.simplefilter("ignore")
 
 input = "/Users/kotaro/PycharmProjects/yakusaku1/input/"
 df = pd.read_csv(input + "data_yakusaku_gakusyu.csv").drop('group_num', axis=1)
-# output = "/Users/kotaro/Desktop/"
 # output = "/Users/kotaro/Desktop/yakusaku_output/"
 output = "./output/"
 
