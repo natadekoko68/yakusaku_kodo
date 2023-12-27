@@ -2,11 +2,15 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import re
-import sys
 import japanize_matplotlib
+import warnings
+warnings.simplefilter("ignore")
 
 input = "/Users/kotaro/PycharmProjects/yakusaku1/input/"
 df = pd.read_csv(input + "data_yakusaku_gakusyu.csv").drop('group_num', axis=1)
+# output = "/Users/kotaro/Desktop/"
+# output = "/Users/kotaro/Desktop/yakusaku_output/"
+output = "./output/"
 
 def make_label_value(df):
     labels = {}
@@ -39,20 +43,42 @@ def make_dict(df):
         ret[key] = pd.DataFrame(dict_temp)
     return ret
 
-dict = make_dict(df)
 
-cnt = 0
-lab = ["獲得","固定","再生"]
-fig = plt.figure(figsize=(12,5))
-order = ["1日目\n生理食塩水", "2日目\n生理食塩水", "1日目\nスコポラミン", "2日目\nスコポラミン"]
-for key in dict:
-    ax = plt.subplot(1, 3, cnt+1)
-    sns.swarmplot(dict[key], x="labels", y="values", order=order, palette="Set2", size=5)
-    sns.boxplot(dict[key], x="labels", y="values", color="white", order=order)
-    plt.title("実験1(" + lab[cnt] + ")")
-    plt.xticks(size=5)
-    cnt += 1
-plt.tight_layout()
-plt.savefig("/Users/kotaro/Desktop/実験1_all.jpg", dpi=300)
-sys.exit()
+def graph_all(df):
+    dict = make_dict(df)
+    cnt = 0
+    lab = ["獲得","固定","再生"]
+    fig = plt.figure(figsize=(12,5))
+    order = ["1日目\n生理食塩水", "2日目\n生理食塩水", "1日目\nスコポラミン", "2日目\nスコポラミン"]
+    for key in dict:
+        ax = plt.subplot(1, 3, cnt+1)
+        sns.swarmplot(dict[key], x="labels", y="values", order=order, palette="Set2", size=5, legend=False)
+        sns.boxplot(dict[key], x="labels", y="values", color="white", order=order, legend=False)
+        plt.title("実験1(" + lab[cnt] + ")")
+        ax.set(xlabel='', ylabel='時間(sec)')
+        plt.xticks(size=5)
+        cnt += 1
+    plt.tight_layout()
+    plt.savefig(output + "実験1_all.jpg", dpi=300)
+
+def graphs(df):
+    dict = make_dict(df)
+    cnt = 0
+    lab = ["獲得", "固定", "再生"]
+    order = ["1日目\n生理食塩水", "2日目\n生理食塩水", "1日目\nスコポラミン", "2日目\nスコポラミン"]
+    for key in dict:
+        fig = plt.figure()
+        ax = plt.subplot(1, 1, 1)
+        sns.swarmplot(dict[key], x="labels", y="values", order=order, palette="Set2", size=5)
+        sns.boxplot(dict[key], x="labels", y="values", color="white", order=order)
+        plt.title("実験1(" + lab[cnt] + ")")
+        # plt.xticks(size=5)
+        ax.set(xlabel='', ylabel='時間(sec)')
+        plt.tight_layout()
+        plt.savefig(output + "実験1("+lab[cnt]+").jpg", dpi=300)
+        plt.close()
+        cnt += 1
+
+graph_all(df)
+graphs(df)
 
