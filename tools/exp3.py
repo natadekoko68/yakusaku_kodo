@@ -7,6 +7,7 @@ import scipy.stats as sps
 import itertools as it
 import warnings
 warnings.simplefilter("ignore")
+import numpy as np
 
 
 input = '/Users/kotaro/PycharmProjects/yakusaku_kodo/input/data_yakusaku_chintsu2.csv'
@@ -25,7 +26,7 @@ for key in keys:
         n = df.loc[i, key + "_n"]
         p = df.loc[i, key + "_p"]
         c = df.loc[i, key + "_c"]
-        dic[key][t] = (n+p, c)
+        dic[key][t] = (n, p, c)
     df = df.drop([key+"_n", key+"_p", key+"_c"], axis=1)
 
 def kai_3(arrs):
