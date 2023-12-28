@@ -71,7 +71,6 @@ def graphs(df):
         sns.swarmplot(dict[key], x="labels", y="values", order=order, palette="Set2", size=5)
         sns.boxplot(dict[key], x="labels", y="values", color="white", order=order)
         plt.title("実験1(" + lab[cnt] + ")")
-        # plt.xticks(size=5)
         ax.set(xlabel='', ylabel='時間(sec)')
         plt.tight_layout()
         plt.savefig(output + "実験1("+lab[cnt]+").jpg", dpi=300)
