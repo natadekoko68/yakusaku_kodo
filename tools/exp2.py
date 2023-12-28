@@ -7,7 +7,7 @@ warnings.simplefilter("ignore")
 
 input = '/Users/kotaro/PycharmProjects/yakusaku_kodo/input/data_yakusaku_saimin.csv'
 df_exp2 = pd.read_csv(input).drop("group_num", axis=1)
-output = "/Users/kotaro/Desktop/yakusaku_output/"
+# output = "/Users/kotaro/Desktop/yakusaku_output/"
 output = "./output/"
 
 def graph_exp2(df):
