@@ -13,10 +13,10 @@ FONT_PATH = "/Users/kotaro/PycharmProjects/yakusaku_kodo/input/Noto_Sans_JP/stat
 fm.fontManager.addfont(FONT_PATH)
 font_prop = fm.FontProperties(fname=FONT_PATH)
 plt.rcParams["font.family"] = font_prop.get_name()
-print(font_prop.get_name())
+from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 
 
-input = '/Users/kotaro/PycharmProjects/yakusaku_kodo/input/data_yakusaku_chintsu.csv'
+input = '/Users/kotaro/PycharmProjects/yakusaku_kodo/input/data_yakusaku_chintsu2.csv'
 df = pd.read_csv(input)
 output = "/Users/kotaro/Desktop/yakusaku_output/"
 # output = "./output/"
@@ -121,30 +121,66 @@ print(results2)
 col_labels = ['molphine', 'molphine\n+naloxone', 'ibuprofen']
 row_labels = ['15sec', '30sec', '60sec', "90sec"]
 
+color_high = "#ff8989"
+color_medium = "#ffb2b2"
+color_low = "#ffdbdb"
+
 fig = plt.figure(figsize=(10, 5))
-fig.suptitle("実験II(鎮痛)  $χ^2$検定結果",fontsize=20)
-ax = fig.add_subplot(121)
-ax.set_title(label='作用が強い場合(n+pとcの比較)',fontsize=17)
-the_table = plt.table(cellText=results,
+gs_master = GridSpec(nrows=2, ncols=2, height_ratios=[20, 1])
+gs_1 = GridSpecFromSubplotSpec(nrows=1, ncols=1, subplot_spec=gs_master[0, 0])
+fig.suptitle("実験II(鎮痛)  $χ^2$検定結果", fontsize=20)
+ax = fig.add_subplot(gs_1[:, :])
+# ax.set_title(label='作用が強い場合(n+pとcの比較)',fontsize=17)
+plt.title('作用が強い場合(n+pとcの比較)')
+table = plt.table(cellText=results,
                       colWidths=[0.5]*3,
                       rowLabels=row_labels,
                       colLabels=col_labels,
                       loc='center')
-the_table.auto_set_font_size(False)
-the_table.set_fontsize(12)
-the_table.scale(0.8, 4)
+for i in range(0, 3):
+    for j in range(1, 5):
+        if results[j-1, i] > sps.chi2.ppf(q=0.999, df=1):
+            table[(j, i)].set_facecolor(color_high)
+        if results[j-1, i] > sps.chi2.ppf(q=0.99, df=1):
+            table[(j, i)].set_facecolor(color_medium)
+        if results[j-1, i] > sps.chi2.ppf(q=0.95, df=1):
+            table[(j, i)].set_facecolor(color_low)
+table.auto_set_font_size(False)
+table.set_fontsize(12)
+table.scale(0.8, 4)
 plt.axis("off")
 
-ax = fig.add_subplot(122)
-ax.set_title(label='作用が弱い場合(nとp+cの比較)',fontsize=17)
-the_table = plt.table(cellText=results2,
+gs_2 = GridSpecFromSubplotSpec(nrows=1, ncols=1, subplot_spec=gs_master[0, 1])
+axes_2 = fig.add_subplot(gs_2[:, :])
+# ax.set_title(label='作用が弱い場合(nとp+cの比較)',fontsize=17)
+plt.title('作用が強い場合(n+pとcの比較)')
+table = plt.table(cellText=results2,
                       colWidths=[0.5]*3,
                       rowLabels=row_labels,
                       colLabels=col_labels,
                       loc='center')
-the_table.auto_set_font_size(False)
-the_table.set_fontsize(12)
-the_table.scale(0.8, 4)
+for i in range(0, 3):
+    for j in range(1, 5):
+        if results[j-1, i] > sps.chi2.ppf(q=0.999, df=1):
+            table[(j, i)].set_facecolor(color_high)
+        if results[j-1, i] > sps.chi2.ppf(q=0.99, df=1):
+            table[(j, i)].set_facecolor(color_medium)
+        if results[j-1, i] > sps.chi2.ppf(q=0.95, df=1):
+            table[(j, i)].set_facecolor(color_low)
+table.auto_set_font_size(False)
+table.set_fontsize(12)
+table.scale(0.8, 4)
+plt.axis("off")
+plt.tight_layout()
+
+gs_3 = GridSpecFromSubplotSpec(nrows=1, ncols=1, subplot_spec=gs_master[1, 0:2])
+axes_3 = fig.add_subplot(gs_3[:, :])
+plt.text(0.7, 0.0, r"$\blacksquare$", color=color_high)
+plt.text(0.7, 0.0, "     p<0.001")
+plt.text(0.8, 0, r"$\blacksquare$", color=color_medium)
+plt.text(0.8, 0, "     p<0.01")
+plt.text(0.9, 0, r"$\blacksquare$", color=color_low)
+plt.text(0.9, 0, "     p<0.05")
 plt.axis("off")
 plt.tight_layout()
 
