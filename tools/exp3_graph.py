@@ -43,7 +43,7 @@ ind_line = np.sort(np.concatenate([ind_p, ind_m]))
 cnt = 1
 fig = plt.figure(figsize=(12, 5))
 fig.suptitle("投与薬剤と鎮痛効果の関係", fontsize=15)
-fig.supxlabel("時間(sec)")
+fig.supxlabel("時間(min)")
 fig.supylabel("匹")
 for key in keys:
     ax = fig.add_subplot(1, 4, cnt)

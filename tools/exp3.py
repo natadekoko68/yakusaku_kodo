@@ -119,11 +119,11 @@ print(results)
 print(results2)
 
 col_labels = ['molphine', 'molphine\n+naloxone', 'ibuprofen']
-row_labels = ['15sec', '30sec', '60sec', "90sec"]
+row_labels = ['15min', '30min', '60min', "90min"]
 
-color_high = "#ff8989"
+color_high = "#ff7f7f"
 color_medium = "#ffb2b2"
-color_low = "#ffdbdb"
+color_low = "#ffc1c1"
 
 fig = plt.figure(figsize=(10, 5))
 gs_master = GridSpec(nrows=2, ncols=2, height_ratios=[20, 1])
@@ -141,9 +141,9 @@ for i in range(0, 3):
     for j in range(1, 5):
         if results[j-1, i] > sps.chi2.ppf(q=0.999, df=1):
             table[(j, i)].set_facecolor(color_high)
-        if results[j-1, i] > sps.chi2.ppf(q=0.99, df=1):
+        elif results[j-1, i] > sps.chi2.ppf(q=0.99, df=1):
             table[(j, i)].set_facecolor(color_medium)
-        if results[j-1, i] > sps.chi2.ppf(q=0.95, df=1):
+        elif results[j-1, i] > sps.chi2.ppf(q=0.95, df=1):
             table[(j, i)].set_facecolor(color_low)
 table.auto_set_font_size(False)
 table.set_fontsize(12)
@@ -163,9 +163,9 @@ for i in range(0, 3):
     for j in range(1, 5):
         if results[j-1, i] > sps.chi2.ppf(q=0.999, df=1):
             table[(j, i)].set_facecolor(color_high)
-        if results[j-1, i] > sps.chi2.ppf(q=0.99, df=1):
+        elif results[j-1, i] > sps.chi2.ppf(q=0.99, df=1):
             table[(j, i)].set_facecolor(color_medium)
-        if results[j-1, i] > sps.chi2.ppf(q=0.95, df=1):
+        elif results[j-1, i] > sps.chi2.ppf(q=0.95, df=1):
             table[(j, i)].set_facecolor(color_low)
 table.auto_set_font_size(False)
 table.set_fontsize(12)
