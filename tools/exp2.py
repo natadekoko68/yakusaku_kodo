@@ -66,10 +66,17 @@ def stat(df):
 
 
 if __name__ == '__main__':
-    df2 = make_df(df_exp2)
-    graph_exp2(df_exp2)
-    # stat(df2)
-    # print(stat(df2).pvalue)
+    # df2 = make_df(df_exp2)
+    # graph_exp2(df_exp2)
+    # # stat(df2)
+    # # print(stat(df2).pvalue)
+    df = make_df(df_exp2)
+
+    print(f'{df[df["labels"] == "saline"]["values"].mean():.3f}')
+    print(f'{df[df["labels"] == "chlorpromazine"]["values"].mean():.3f}')
+    print(f'{df[df["labels"] == "diazepam"]["values"].mean():.3f}')
+    print(f'{df[df["labels"] == "caffeine"]["values"].mean():.3f}')
+
 
 
 
